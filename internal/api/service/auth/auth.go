@@ -50,7 +50,7 @@ type AuthService struct {
 }
 
 func NewAuthService(authRepo auth.IAuthRepo, userRepo user.IUserRepo) IAuthService {
-	return AuthService{
+	return &AuthService{
 		AuthRepo: authRepo,
 		UserRepo: userRepo,
 	}

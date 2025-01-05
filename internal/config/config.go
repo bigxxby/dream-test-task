@@ -8,6 +8,7 @@ import (
 )
 
 var JwtSecret []byte
+var AppPort string
 
 type Config struct {
 	AppPort string
@@ -61,6 +62,6 @@ func GetCofig() (*Config, error) {
 		}
 	}
 	JwtSecret = []byte(config.JwtSecret)
-
+	AppPort = config.AppPort
 	return config, nil
 }
