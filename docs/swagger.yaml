@@ -1,0 +1,374 @@
+basePath: /
+definitions:
+  auth.ErrorResponse:
+    properties:
+      error:
+        type: string
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+  auth.LoginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  auth.LoginResponse:
+    properties:
+      message:
+        type: string
+      success:
+        type: boolean
+      token:
+        type: string
+    type: object
+  auth.RegisterRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  auth.RegisterResponse:
+    properties:
+      message:
+        type: string
+      success:
+        type: boolean
+      user:
+        $ref: '#/definitions/models.User'
+    type: object
+  auth.WhoamiResponse:
+    properties:
+      message:
+        type: string
+      success:
+        type: boolean
+      user:
+        $ref: '#/definitions/models.User'
+    type: object
+  models.User:
+    properties:
+      id:
+        type: string
+      username:
+        type: string
+    type: object
+  shortener.CreateShortLinkRequest:
+    properties:
+      url:
+        type: string
+    required:
+    - url
+    type: object
+  shortener.CreateShortLinkResponse:
+    properties:
+      message:
+        type: string
+      short_link:
+        type: string
+      success:
+        type: boolean
+    type: object
+  shortener.ErrorResponse:
+    properties:
+      error:
+        type: string
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+  shortener.GetLinkResponse:
+    properties:
+      link:
+        type: string
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+  shortener.GetLinksResponse:
+    properties:
+      links:
+        items:
+          type: string
+        type: array
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+  shortener.SuccessResponse:
+    properties:
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+host: localhost:8081
+info:
+  contact: {}
+  description: This is a dream-shortener API
+  title: dream-shortener API
+  version: "1.0"
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate a user and return a token
+      parameters:
+      - description: Login request body
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/auth.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.LoginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/auth.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/auth.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/auth.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/auth.ErrorResponse'
+      summary: Login a user
+      tags:
+      - Auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Create a new user account
+      parameters:
+      - description: Register request body
+        in: body
+        name: register
+        required: true
+        schema:
+          $ref: '#/definitions/auth.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.RegisterResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/auth.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/auth.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/auth.ErrorResponse'
+      summary: Register a new user
+      tags:
+      - Auth
+  /auth/whoami:
+    get:
+      description: Returns information about the currently authenticated user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.WhoamiResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/auth.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/auth.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/auth.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/auth.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get user information
+      tags:
+      - Auth
+  /shortener:
+    get:
+      description: Retrieves all the shortened links associated with the authenticated
+        user.
+      responses:
+        "200":
+          description: Links retrieved successfully
+          schema:
+            $ref: '#/definitions/shortener.GetLinksResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/shortener.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/shortener.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get all shortened links for a user
+      tags:
+      - Shortener
+    post:
+      description: Creates a new shortened link from the provided URL.
+      parameters:
+      - description: Request body for creating short link
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/shortener.CreateShortLinkRequest'
+      responses:
+        "200":
+          description: Link created successfully
+          schema:
+            $ref: '#/definitions/shortener.CreateShortLinkResponse'
+        "400":
+          description: Invalid URL or missing parameters
+          schema:
+            $ref: '#/definitions/shortener.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/shortener.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/shortener.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create a shortened link
+      tags:
+      - Shortener
+  /shortener/{shortID}:
+    delete:
+      description: Deletes a shortened link by its shortID
+      parameters:
+      - description: Shortened Link ID
+        in: path
+        name: shortID
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Link deleted successfully
+          schema:
+            $ref: '#/definitions/shortener.SuccessResponse'
+        "400":
+          description: ShortID is empty or invalid
+          schema:
+            $ref: '#/definitions/shortener.ErrorResponse'
+        "404":
+          description: Shortened link not found
+          schema:
+            $ref: '#/definitions/shortener.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/shortener.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete a shortened link
+      tags:
+      - Shortener
+    get:
+      description: Redirects the user to the original URL from a shortened link ID.
+      parameters:
+      - description: Shortened Link ID
+        in: path
+        name: shortID
+        required: true
+        type: string
+      responses:
+        "302":
+          description: Redirected to the original URL
+          schema:
+            type: string
+        "400":
+          description: ShortID is empty or invalid
+          schema:
+            $ref: '#/definitions/shortener.ErrorResponse'
+        "404":
+          description: Link not found
+          schema:
+            $ref: '#/definitions/shortener.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/shortener.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Redirect to the original URL
+      tags:
+      - Shortener
+  /shortener/stats/{shortID}:
+    get:
+      description: Retrieves the original URL statistics based on the provided shortened
+        link ID.
+      parameters:
+      - description: Shortened Link ID
+        in: path
+        name: shortID
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Link stats retrieved successfully
+          schema:
+            $ref: '#/definitions/shortener.GetLinkResponse'
+        "400":
+          description: Invalid ShortID
+          schema:
+            $ref: '#/definitions/shortener.ErrorResponse'
+        "404":
+          description: Link not found
+          schema:
+            $ref: '#/definitions/shortener.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/shortener.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get original link stats from short URL
+      tags:
+      - Shortener
+securityDefinitions:
+  BearerAuth:
+    description: 'Provide your Bearer token in the format: Bearer <token>'
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

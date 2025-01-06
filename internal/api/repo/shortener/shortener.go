@@ -23,6 +23,7 @@ type ShortenerRepo struct {
 func NewShortenerRepo(db *gorm.DB) IShortenerRepo {
 	return &ShortenerRepo{Db: db}
 }
+
 func (sr *ShortenerRepo) GetLinks(userId *uuid.UUID) ([]models.ShortLink, error) {
 	var links []models.ShortLink
 	err := sr.Db.Where("user_id = ?", userId).Find(&links).Error
@@ -39,7 +40,6 @@ func (sr *ShortenerRepo) UpdateShortLink(link *models.ShortLink) error {
 	return result.Error
 }
 
-// CreateShortLink сохраняет в базе данных новую короткую ссылку.
 func (sr *ShortenerRepo) CreateShortLink(link *models.ShortLink) error {
 	result := sr.Db.Create(link)
 	if result.Error != nil {

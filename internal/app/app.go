@@ -9,7 +9,7 @@ import (
 	"github.com/bigxxby/dream-test-task/internal/router"
 )
 
-func Run() {
+func App() {
 	//make log flags to show file name and line number
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	config, err := config.GetCofig()
