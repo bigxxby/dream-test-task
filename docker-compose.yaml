@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    environment:
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - JWT_SECRET=${JWT_SECRET}
+      - APP_PORT=${APP_PORT}
+    depends_on:
+      - postgres
+    ports:
+      - "${APP_PORT}:${APP_PORT}"
+    command: ["/usr/local/bin/app"]
+    networks:
+      - app-network
+
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "5433:5432" # Пробрасываем порт 5433 хоста на порт 5432 контейнера
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
