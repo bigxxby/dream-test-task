@@ -46,17 +46,17 @@ type ErrorResponse struct {
 }
 
 // Register godoc
-// @Summary Register a new user
-// @Description Create a new user account
-// @Tags Auth
-// @Accept json
-// @Produce json
-// @Param register body RegisterRequest true "Register request body"
-// @Success 200 {object} RegisterResponse
-// @Failure 400 {object} ErrorResponse
-// @Failure 409 {object} ErrorResponse
-// @Failure 500 {object} ErrorResponse
-// @Router /auth/register [post]
+//	@Summary		Register a new user
+//	@Description	Create a new user account
+//	@Tags			Auth
+//	@Accept			json
+//	@Produce		json
+//	@Param			register	body		RegisterRequest	true	"Register request body"
+//	@Success		200			{object}	RegisterResponse
+//	@Failure		400			{object}	ErrorResponse
+//	@Failure		409			{object}	ErrorResponse
+//	@Failure		500			{object}	ErrorResponse
+//	@Router			/auth/register [post]
 func (ac AuthCtrl) Register(ctx *gin.Context) {
 	var req RegisterRequest
 	if err := ctx.BindJSON(&req); err != nil {
@@ -129,18 +129,18 @@ type LoginResponse struct {
 }
 
 // Login godoc
-// @Summary Login a user
-// @Description Authenticate a user and return a token
-// @Tags Auth
-// @Accept json
-// @Produce json
-// @Param login body LoginRequest true "Login request body"
-// @Success 200 {object} LoginResponse
-// @Failure 400 {object} ErrorResponse
-// @Failure 401 {object} ErrorResponse
-// @Failure 404 {object} ErrorResponse
-// @Failure 500 {object} ErrorResponse
-// @Router /auth/login [post]
+//	@Summary		Login a user
+//	@Description	Authenticate a user and return a token
+//	@Tags			Auth
+//	@Accept			json
+//	@Produce		json
+//	@Param			login	body		LoginRequest	true	"Login request body"
+//	@Success		200		{object}	LoginResponse
+//	@Failure		400		{object}	ErrorResponse
+//	@Failure		401		{object}	ErrorResponse
+//	@Failure		404		{object}	ErrorResponse
+//	@Failure		500		{object}	ErrorResponse
+//	@Router			/auth/login [post]
 func (ac AuthCtrl) Login(ctx *gin.Context) {
 	var req LoginRequest
 	if err := ctx.BindJSON(&req); err != nil {
@@ -216,17 +216,17 @@ type WhoamiResponse struct {
 }
 
 // Whoami godoc
-// @Summary      Get user information
-// @Description  Returns information about the currently authenticated user
-// @Tags         Auth
-// @Security     BearerAuth
-// @Produce      json
-// @Success      200 {object} WhoamiResponse
-// @Failure      400 {object} ErrorResponse
-// @Failure      401 {object} ErrorResponse
-// @Failure      404 {object} ErrorResponse
-// @Failure      500 {object} ErrorResponse
-// @Router       /auth/whoami [get]
+//	@Summary		Get user information
+//	@Description	Returns information about the currently authenticated user
+//	@Tags			Auth
+//	@Security		BearerAuth
+//	@Produce		json
+//	@Success		200	{object}	WhoamiResponse
+//	@Failure		400	{object}	ErrorResponse
+//	@Failure		401	{object}	ErrorResponse
+//	@Failure		404	{object}	ErrorResponse
+//	@Failure		500	{object}	ErrorResponse
+//	@Router			/auth/whoami [get]
 func (ac AuthCtrl) Whoami(ctx *gin.Context) {
 	userID, _ := ctx.Get("user_id")
 	if userID == nil {

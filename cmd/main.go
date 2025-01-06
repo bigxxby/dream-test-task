@@ -16,15 +16,15 @@ func init() {
 	}
 }
 
-// @title dream-shortener API
-// @version 1.0
-// @description This is a dream-shortener API
-// @host localhost:8081
-// @BasePath /
-// @securityDefinitions.apikey BearerAuth
-// @in                         header
-// @name                       Authorization
-// @description                Provide your Bearer token in the format: Bearer <token>
+//	@title						dream-shortener API
+//	@version					1.0
+//	@description				This is a dream-shortener API
+//	@host						localhost:8081
+//	@BasePath					/
+//	@securityDefinitions.apikey	BearerAuth
+//	@in							header
+//	@name						Authorization
+//	@description				Provide your Bearer token in the format: Bearer <token>
 func main() {
 	app.App()
 }
